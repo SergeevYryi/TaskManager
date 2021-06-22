@@ -3,10 +3,7 @@ package com.taskbase;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Scanner;
 
 @SpringBootApplication
@@ -38,6 +35,21 @@ public class TaskManagerApplication {
                             + result.getString("name") + " "
                             + result.getString("STATE"));
                 }
+            }else if (command == 2) {
+                String sql = "update task set state = 'DONE' where id = ?";
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                System.out.println("Введите идентификатор задачи:");
+                int taskId = scanner.nextInt();
+                preparedStatement.setInt(1, taskId);
+                preparedStatement.executeUpdate();
+            }else if (command == 3) {
+                String sql = "insert into task( name, state) values (?, 'IN_PROGRESS')";
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                System.out.println("Введите название задачи:");
+                scanner.nextLine();
+                String taskName = scanner.nextLine();
+                preparedStatement.setString(1, taskName);
+                preparedStatement.executeUpdate();
             } else if (command == 4) {
                 System.exit(0);
             } else {
